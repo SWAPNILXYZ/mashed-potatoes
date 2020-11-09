@@ -1,78 +1,70 @@
-var database;
-var back_img;
-var gameState =0;
-var playerCount = 0;
-var allPlayers;
+var boy, boyImage;
 
-var player, form,game;
-var player1,player2;
-var players;
-var fruits;
-var fruitGroup;
-var fruit1_img, fruit2_img, fruit3_img, fruit4_img, fruit5_img;
-var player_img;
+const Engine = Matter.Engine;
+const World= Matter.World;
+const Bodies = Matter.Bodies;
+const Constraint = Matter.Constraint;
 
-var score = 0;
-var score2 = 0;
+var engine, world;
+var maxdrops = 1000;
+
+drops1 = [];
+
 function preload(){
-  back_img = loadImage("images/jungle.jpg");
-  player_img = loadImage("images/basket2.png");
-  fruit1_img = loadImage("images/apple2.png");
-  fruit2_img = loadImage("images/banana2.png");
-  fruit3_img = loadImage("images/melon2.png");
-  fruit4_img = loadImage("images/orange2.png");
-  fruit5_img = loadImage("images/pineapple2.png");
-  fruitGroup = new Group();
-}
-function setup() {
-  createCanvas(1000, 600);
-  database = firebase.database();
-  game = new Game();
-  game.getState();
-  game.start();
+  boyImage = loadImage("images/Walking Frame/walking_1.png");
+  thunderImg = loadImage("images/thunderbolt/1.png");
+  thunder2Img = loadImage("images/thunderbolt/2.png");
+  thunder3Img = loadImage("images/thunderbolt/3.png");
+  thunder4Img = loadImage("images/thunderbolt/4.png");
   
 }
 
-function draw() {
+function setup(){
+  engine = Engine.create();
+  world = engine.world;
+
+  createCanvas(1200, 1200);
+
+    boy = createSprite(600, 620, 100, 100);
+    boy.addImage("boy", boyImage);
+    boy.scale = 0.5;
+
+   
+   
+    umbrella1 = new Umbrella(610, 550, 160);
+
+    if (frameCount% 150 === 0){
+      for(var i = 0; i < maxdrops; i++){
+        drops1.push(new Drops(random(0,1200), random(0,1200)));
+      }
+    }
+   
+}
+
+
+function draw(){
+  Engine.update(engine);
+  background(0);
   
-  background(back_img);
+  boy.display();
  
-   if (playerCount === 2) {
-     game.update(1);
-   }
-   if (gameState === 1) {
-     clear(); 
-     game.play();
-   }
-   if (gameState === 2) {
-    
-     game.end();
-   }
-  
-    
-  
+ num = Math.round(random(1 ,4))
+ if (frameCount% 80 === 0){
+thunder = createSprite(random(10, 1200), random(10, 1200), 10, 10);
+ switch(num){
+  case 1: thunder.addImage(thunderImg);
+  break;
+  case 2: thunder.addImage(thunder2Img);
+  break;
+  case 3: thunder.addImage(thunder3Img);
+  break;
+  case 4: thunder.addImage(thunder4Img);
+  break;
 }
+ }
+for(var i = 0; i<maxdrops; i++){ drops1[i].display(); drops1[i].updateY() }
+drawSprites();
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+umbrella1.display();
+}   
 
